@@ -39,7 +39,8 @@ public class Student extends User {
     private String niveau;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "university_id", nullable = false)
+    //@JoinColumn(name = "university_id", nullable = false)
+    @JoinColumn(name = "university_id")
     private University university;
 
     @OneToMany(
@@ -67,6 +68,9 @@ public class Student extends User {
         this.specialite = specialite;
         this.university = university;
         this.niveau = niveau;
+    }
+    University getUniversity() {
+    	return this.university;
     }
    
 }
