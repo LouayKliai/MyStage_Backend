@@ -1,37 +1,36 @@
 package src.RH;
 
-import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.validation.constraints.NotNull;
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import src.societe.Societe;
+
+import src.user.User;
 import src.utils.ROLE;
-import src.utils.User;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RH extends User {
 
-    @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "societe_id", nullable = false)
     private Societe societe;
 
+   
     public RH(String nom, String prenom, LocalDate dateNaissance,
               String email, String numeroTel, String residence,
-              ROLE role, Societe societe) {
+              ROLE role, String password, Societe societe) {
 
-        super(nom, prenom, dateNaissance, email, numeroTel, residence, role);
+        super(nom, prenom, dateNaissance, email, numeroTel, residence, role, password);
         this.societe = societe;
     }
 }

@@ -1,61 +1,45 @@
 package src.universite;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import src.studet.Student;
 import src.utils.STATE;
-
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class University {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "university_id")
     private UUID id;
-
     @Column(nullable = false, unique = true)
     private String nom;
-
-    @Column(nullable = false)
     private String locale;
-
-    @Column(nullable = false)
     private String domaine;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private STATE etat;
 
-    @OneToMany(
-        mappedBy = "university",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true,
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(mappedBy = "university",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    @JsonIgnore
+    @JsonManagedReference
     private List<Student> listEtudiant = new ArrayList<>();
 
-    public University(String nom, String locale, String domaine, STATE etat) {
-        this.nom = nom;
-        this.locale = locale;
-        this.domaine = domaine;
-        this.etat = etat;
+    public void addStudent(Student student) {
+        listEtudiant.add(student);
+        student.setUniversity(this);
+    }
+    public void removeStudent(Student student) {
+        listEtudiant.remove(student);
+        student.setUniversity(null);
     }
 }
