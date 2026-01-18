@@ -28,29 +28,18 @@ public class Student extends User {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "university_id")
-    @JsonBackReference
+    //@JsonBackReference
     private University university;
 
-   
+   private String bio;
 
     @ElementCollection
-    @JsonIgnore
+    //@JsonIgnore
     private List<String> skills = new ArrayList<>();
-
-    /*@OneToMany(mappedBy = "student")
-    private List<Stage> stages = new ArrayList<>();
-    */
+    
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Candidature> candidatures = new ArrayList<>();
 
-    public Student(String nom, String prenom, LocalDate dateNaissance,
-                   String email, String numeroTel, String residence,
-                   ROLE role,String pwd, Specialite specialite, University university, String niveau) {
-
-        super(nom, prenom, dateNaissance, email, numeroTel, residence, role,pwd);
-        this.specialite = specialite;
-        this.university = university;
-        this.niveau = niveau;
-    }
+    
 }

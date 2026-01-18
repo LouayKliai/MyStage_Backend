@@ -1,15 +1,16 @@
 package src.candidature;
 
-import java.util.List;
+
 import java.util.Optional;
-import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CandidatureRepository extends JpaRepository<Candidature, Long> {
-	Optional<Candidature> findById(Long id);
-    boolean existsByStudentIdAndOffreId(UUID studentId, int offreId);
+import src.Offre.Offre;
+import src.studet.Student;
 
-    List<Candidature> findByOffreId(int offreId);
-    List<Candidature> findByStudentId(UUID studentId);
+public interface CandidatureRepository extends JpaRepository<Candidature, Long> {
+
+	 Optional<Candidature> findByStudentAndOffre(Student student, Offre offre);
+
 
 }

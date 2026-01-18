@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import src.RH.RH;
 import src.candidature.Candidature;
 import src.societe.Societe;
+import src.utils.OfferType;
+
 import java.util.List;
 
 @Entity
@@ -22,6 +25,11 @@ public class Offre {
     @NotNull
     @Min(1)
     private int duree;
+    
+    private String description;
+    
+    @Enumerated(EnumType.STRING)
+    private OfferType type;
 
     @ElementCollection
     private List<String> qualification;
@@ -32,4 +40,9 @@ public class Offre {
 
     @OneToMany(mappedBy = "offre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Candidature> candidatures;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rh_id")
+    private RH rh;
+
 }

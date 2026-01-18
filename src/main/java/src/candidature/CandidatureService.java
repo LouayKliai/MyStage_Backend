@@ -1,10 +1,13 @@
 package src.candidature;
 
-import java.util.UUID;
+
+import src.DTO.Application.ApplicationResponseDTO;
+import src.RH.RH;
 
 public interface CandidatureService {
 	
-	Candidature postuler(UUID studentId, int offreId);
-	Candidature accepter(Long candidatureId, UUID rhId);
-	Candidature refuser(Long candidatureId, UUID rhId);
+	
+	ApplicationResponseDTO accepter(Long candidatureId, RH rh);
+    ApplicationResponseDTO refuser(Long candidatureId, RH rh);
+
 }

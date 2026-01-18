@@ -20,8 +20,8 @@ public abstract class User {
     @Column(name = "user_id", nullable = false, updatable = false)
     private UUID id;
 
-    @NotNull private String nom;
-    @NotNull private String prenom;
+    @NotNull private String fullname;
+    
 
     private LocalDate dateDeNaissance;
 
@@ -40,11 +40,10 @@ public abstract class User {
     @Column(nullable = false)
     private String password;
 
-    public User(String nom, String prenom, LocalDate dateNaissance,
+    public User(String fullname, LocalDate dateNaissance,
                 String email, String numeroTel, String residence, ROLE role,String pwd) {
 
-        this.nom = nom;
-        this.prenom = prenom;
+        this.fullname = fullname;        
         this.dateDeNaissance = dateNaissance;
         this.email = email;
         this.numeroTel = numeroTel;

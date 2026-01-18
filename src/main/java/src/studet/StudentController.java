@@ -5,6 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import src.DTO.Student.StudentLoginDTO;
+import src.DTO.Student.StudentProfileDTO;
+import src.DTO.Student.StudentRegisterDTO;
+import src.DTO.Student.StudentResponseDTO;
+import src.DTO.Student.StudentUpdateDTO;
 import src.utils.Specialite;
 
 @RestController
@@ -16,11 +22,17 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
+    @PostMapping("/login")
+    public ResponseEntity<StudentResponseDTO> login(
+            @RequestBody StudentLoginDTO dto) {
 
+        StudentResponseDTO student = studentService.login(dto);
+        return ResponseEntity.ok(student);
+    }
 
-    @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {    	
-        Student savedStudent = studentService.createStudent(student);
+    @PostMapping("/register")
+    public ResponseEntity<Student> createStudent(@RequestBody StudentRegisterDTO dto) {    	
+        Student savedStudent = studentService.register(dto);
         return ResponseEntity.ok(savedStudent);
     }
 
@@ -30,12 +42,27 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
+    
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable UUID id) {
-        Optional<Student> student = studentService.getStudentById(id);
-        return student.map(ResponseEntity::ok)
-                      .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable UUID id) {
+
+        Student student = studentService.getStudentById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        StudentResponseDTO response = new StudentResponseDTO(
+            student.getId(),
+            student.getFullname(),
+            student.getEmail(),
+            student.getSkills(),
+            student.getNiveau(),
+            student.getSpecialite(),
+            student.getBio()
+            
+        );
+
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/email/{email}")
     public ResponseEntity<Student> getStudentByEmail(@PathVariable String email) {
@@ -54,6 +81,39 @@ public class StudentController {
         return studentService.getStudentsByUniversityId(universityId);
     }
 
+   
+    @PutMapping("/{studentId}/university/{universityId}")
+    public ResponseEntity<Student> assignStudentToUniversity(
+            @PathVariable UUID studentId,
+            @PathVariable UUID universityId) {
+
+        Student student = studentService.assignStudentToUniversity(studentId, universityId);
+        return ResponseEntity.ok(student);
+    }
+    
+    
+   
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<StudentResponseDTO> updateProfile(
+            @PathVariable UUID id,
+            @RequestBody StudentUpdateDTO dto) {
+
+        return ResponseEntity.ok(
+            studentService.updateProfile(id, dto)
+        );
+    }
+
+    
+       
+/*
+    @PutMapping("/{id}/skills")
+    public ResponseEntity<Student> updateSkills(
+    		@PathVariable UUID id,
+    		@RequestBody List<String> skills) {
+    	
+    	Student student = studentService.updateSkills(id, skills);
+    	return ResponseEntity.ok(student);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable UUID id) {
         studentService.deleteStudent(id);
@@ -65,14 +125,5 @@ public class StudentController {
     public ResponseEntity<Void> deleteAllStudents() {
         studentService.deleteAllStudent();
         return ResponseEntity.noContent().build();
-    }
-    @PutMapping("/{studentId}/university/{universityId}")
-    public ResponseEntity<Student> assignStudentToUniversity(
-            @PathVariable UUID studentId,
-            @PathVariable UUID universityId) {
-
-        Student student = studentService.assignStudentToUniversity(studentId, universityId);
-        return ResponseEntity.ok(student);
-    }
-
+    }*/
 }

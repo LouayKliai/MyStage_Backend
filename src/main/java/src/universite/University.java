@@ -23,6 +23,8 @@ public class University {
     private String nom;
     private String locale;
     private String domaine;
+    
+    
 
     @Enumerated(EnumType.STRING)
     private STATE etat;
