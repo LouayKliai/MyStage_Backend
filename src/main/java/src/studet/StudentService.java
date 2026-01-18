@@ -20,6 +20,7 @@ public interface StudentService {
     List<Student> getAllStudents();
     List<Student> getStudentsBySpecialite(Specialite specialite);
     List<Student> getStudentsByUniversityId(UUID university_id);
+	Student assignStudentToUniversity(UUID studentId, UUID universityId);
 
 	
 		

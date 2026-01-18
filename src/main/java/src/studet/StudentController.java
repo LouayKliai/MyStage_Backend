@@ -66,4 +66,13 @@ public class StudentController {
         studentService.deleteAllStudent();
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{studentId}/university/{universityId}")
+    public ResponseEntity<Student> assignStudentToUniversity(
+            @PathVariable UUID studentId,
+            @PathVariable UUID universityId) {
+
+        Student student = studentService.assignStudentToUniversity(studentId, universityId);
+        return ResponseEntity.ok(student);
+    }
+
 }

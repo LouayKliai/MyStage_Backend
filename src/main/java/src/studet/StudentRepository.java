@@ -10,7 +10,7 @@ import src.universite.University;
 import src.utils.Specialite;
 
 public interface StudentRepository  extends JpaRepository<Student,UUID>{	
-	Optional<Student> findStudentByEmail(String email);
+	Optional<Student> findByEmail(String email);
 	List<Student> findBySpecialite(Specialite specialite);
 	List<Student> findByUniversityId(UUID university_id);
 

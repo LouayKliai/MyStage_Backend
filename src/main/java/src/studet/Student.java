@@ -1,76 +1,56 @@
 package src.studet;
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import src.stage.Stage;
+import jakarta.persistence.*;
+import lombok.*;
+import src.candidature.Candidature;
+
 import src.universite.University;
-import src.utils.ROLE;
-import src.utils.Specialite;
-import src.utils.User;
+import src.user.User;
+import src.utils.*;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class Student extends User {
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Specialite specialite;
 
-    @Column(nullable = false)
     private String niveau;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "university_id", nullable = false)
     @JoinColumn(name = "university_id")
+    @JsonBackReference
     private University university;
 
-    @OneToMany(
-        mappedBy = "student",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true,
-        fetch = FetchType.LAZY
-    )
+   
+
+    @ElementCollection
+    @JsonIgnore
+    private List<String> skills = new ArrayList<>();
+
+    /*@OneToMany(mappedBy = "student")
     private List<Stage> stages = new ArrayList<>();
+    */
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Candidature> candidatures = new ArrayList<>();
 
+    public Student(String nom, String prenom, LocalDate dateNaissance,
+                   String email, String numeroTel, String residence,
+                   ROLE role,String pwd, Specialite specialite, University university, String niveau) {
 
-    public Student(
-        String nom,
-        String prenom,
-        LocalDate dateNaissance,
-        String email,
-        String numeroTel,
-        String residence,
-        ROLE role,
-        Specialite specialite,
-        University university,
-        String niveau
-    ) {
-        super(nom, prenom, dateNaissance, email, numeroTel, residence, role);
+        super(nom, prenom, dateNaissance, email, numeroTel, residence, role,pwd);
         this.specialite = specialite;
         this.university = university;
         this.niveau = niveau;
     }
-    University getUniversity() {
-    	return this.university;
-    }
-   
 }
